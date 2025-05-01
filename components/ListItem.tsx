@@ -1,7 +1,6 @@
 import { Image, StyleSheet, View, Text } from "react-native"
 import { Card } from "react-native-paper"
 
-
 export const ListItemDivider = () => {
     return (
         <View style={styles.container}>
@@ -14,14 +13,12 @@ export const ListItemDivider = () => {
 
 export const EmptyResultView = () => {
     return (
-        <Card elevation={0} style={styles.emptyCard}>
-            <View style={{flexDirection: 'column'}}>
-                <Image source={require('../assets/no-results.png')} style={styles.imageView}/>
-                <Text style={styles.emptyTitle}>{'No Results'}</Text>
-                <Text style={styles.emptySubTitle}>{'Try MCO'}</Text>
-            </View>
-        </Card>
-    )
+        <View style={styles.emptyContainer}>
+            <Image source={require('../assets/no-results.png')} style={styles.imageView} resizeMode="contain"/>
+            <Text style={styles.emptyTitle}>{'No Results'}</Text>
+            <Text style={styles.emptySubTitle}>{'Try MCO'}</Text>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -56,5 +53,13 @@ const styles = StyleSheet.create({
     imageView: {
         width: 50,
         height: 50
+    },
+    emptyContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 32,
+        flex: 1,
+        flexDirection: 'column',
+        marginTop: 30
     }
 })

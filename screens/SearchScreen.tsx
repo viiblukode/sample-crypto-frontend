@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigation/RootNavigator";
-import { Button, FlatList, SafeAreaView, StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { Header, SearchHeader } from "../components/Header";
+import { FlatList, SafeAreaView, StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { SearchHeader } from "../components/Header";
 import { useGetCurrencyData } from "../hooks/useGetCurrencyData";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { useGetSearchCurrency } from "../hooks/useGetSearchCurrency";
 import { CurrencyInfo } from "../types/dataTypes";
@@ -78,13 +78,15 @@ const SearchScreen:React.FC<Props> = ({ navigation }) => {
                         navigation.navigate('Details', { coinInfo: item }) 
                     }
                 }}>
-                <View style={styles.itemIconView}>
-                    <Text style={styles.itemIconText}>{itemInitial}</Text>
+                <View style={styles.leftContainer}>
+                    <View style={styles.itemIconView}>
+                        <Text style={styles.itemIconText}>{itemInitial}</Text>
+                    </View>
+                    <Text style={styles.nameText}>
+                        {item.name}
+                    </Text>
                 </View>
-                <Text style={styles.nameText}>
-                    {item.name}
-                </Text>
-                <View style={{width: 140}}/>
+                
                 {showMoreInfoButton && (
                     <View style={styles.coinInfoView}>
                         <Text style={styles.coinInitial}>{item.symbol}</Text>
@@ -135,8 +137,10 @@ const styles = StyleSheet.create({
     },
     itemView: {
         flexDirection: 'row',
-        padding: 5,
-        height: 50
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 12,
+        paddingHorizontal: 14,
     },
     itemIconView: {
         borderRadius: 100,
@@ -161,16 +165,22 @@ const styles = StyleSheet.create({
         marginRight: 0
     },
     coinInitial: {
-        fontSize: 16,
+        color: '#666',
+        marginRight: 4,
+        fontWeight: '500',
     },
     coinInfoView: {
         flexDirection: 'row',
         marginTop: 8,
-        justifyContent: 'space-evenly',
+        alignItems: 'center'
     },
     listContainer: {
         flex: 1
-    }
+    },
+    leftContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
 });
 
 export default SearchScreen;
