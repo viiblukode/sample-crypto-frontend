@@ -12,7 +12,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const HomeScreen:React.FC<Props> = ({ navigation }) => {
     const { postPopulateData, isPostPopulateDataSuccessful, isPostPopulateDataFailed } = usePostPopulateData();
-    const { deleteData, isDeleteSuccessful, isDeleteFailed, deleteError, isDeleteLoading } = useDeleteData();
+    const { deleteData, isDeleteSuccessful, isDeleteFailed } = useDeleteData();
     const [ displaySnackBar, setDisplaySnackBar] = useState<boolean>(false);
     const [ snackBarMessage, setSnackBarMessage] = useState<string>('');
 

@@ -18,9 +18,10 @@ interface CoinDetailParams {
 }
 
 const DetailsScreen:React.FC<Props> = ({ route }: CoinDetailParams ) => {
-
     const coinInfo = route.params.coinInfo;
-    const { getCoinStatus, coinData, isGetCoinStatusSuccessful, isGetCoinStatusFailed, getCoinStatusError, getCoinStatusLoading } = useGetCoinStatus();
+    const { 
+        getCoinStatus, 
+        coinData } = useGetCoinStatus();
     const [ coinResult, setCoinResult ] = useState<CoinStatus>();
 
     useEffect(() => {
@@ -43,9 +44,10 @@ const DetailsScreen:React.FC<Props> = ({ route }: CoinDetailParams ) => {
                 title={'Details'}
                 showLeftActionButton={true}/>
 
-            <View>
-                <Text style={styles.title}>{`CoinId: ${coinResult?.coinId}`}</Text>
-                <Text style={styles.title}>{`Availability: ${coinResult?.availability}`}</Text>
+            <View style={styles.infoDisplayView}>
+                <Text style={styles.title} testID='coin-code-label'>{`Coin Code: ${coinResult?.coinId}`}</Text>
+                <Text style={styles.title} testID='coin-name-label'>{`Coin Name: ${coinInfo.name}`}</Text>
+                <Text style={styles.title} testID='coin-status-label'>{`Availability: ${coinResult?.availability}`}</Text>
             </View>
             
         </SafeAreaView>
@@ -56,6 +58,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFF',
+    },
+    infoDisplayView: {
+        marginHorizontal: 10,
+        marginVertical: 10,
+        flex: 1,
+        flexDirection: 'column'
     },
     title: {
         fontSize: 16,

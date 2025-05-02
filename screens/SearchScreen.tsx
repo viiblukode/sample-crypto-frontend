@@ -6,7 +6,7 @@ import { useGetCurrencyData } from "../hooks/useGetCurrencyData";
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { useGetSearchCurrency } from "../hooks/useGetSearchCurrency";
-import { CurrencyInfo } from "../types/dataTypes";
+import { CurrencyInfo, CurrencyListType } from "../types/dataTypes";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { EmptyResultView, ListItemDivider } from "../components/ListItem";
 
@@ -17,47 +17,52 @@ const SearchScreen:React.FC<Props> = ({ navigation }) => {
 
     const { 
         getCurrencyList, 
-        dataResult, 
-        isGetCurrencyDataSuccessful, 
-        isGetCurrencyDataFailed, 
-        getCurrencyDataError, 
-        getCurrencyDataLoading } = useGetCurrencyData();
+        dataResult } = useGetCurrencyData();
     
-    const { searchCoinList, searchResult, isSearchCoinSuccessful, isSearchCoinFailed, getSearchCoinError, getSearchCoinLoading
-    } = useGetSearchCurrency();
+    const { searchCoinList, searchResult } = useGetSearchCurrency();
 
-   const isFocused = useIsFocused();
-    const [query, setQuery] = useState<string>('');
+    const [query, setQuery] = useState<string | undefined>();
+    const [listType, setListType] = useState<CurrencyListType>(CurrencyListType.ALL);
     const [dataList, setDataList] = useState<CurrencyInfo[]>([]);
 
     useEffect(() => {
-        //initial load
-        const loadCurrencyList = async () => {
-            await getCurrencyList();
-        }
         loadCurrencyList();
     }, []);
 
     useEffect(() => {
         const queryCoinList = async () => {
-            if(query.length > 0) {
+            if(query) {
+                setListType(CurrencyListType.ALL); //reset to default option
                 await searchCoinList(query);
-            } else {
-                await getCurrencyList(); // if got no query search, retrieve all list
-            }
+            } 
         }
         queryCoinList();
     }, [query]);
 
     useEffect(() => {
+        if(!query) {
+            loadCurrencyList(); //if no query, to retrieve all listing 
+        }
+    }, [query]);
+
+    useEffect(() => {
+        setQuery(undefined);
+        loadCurrencyList(); //if no query, to retrieve all listing 
+    }, [listType]);
+
+    useEffect(() => {
         if(dataResult) {
             setDataList(dataResult);
         };
-        if(searchResult) {
+        if(query && searchResult) {
             setDataList(searchResult);
         }
     }, [dataResult, searchResult]);
     
+    //initial load
+    const loadCurrencyList = async () => {
+        await getCurrencyList(listType);
+    }
 
     const renderItemSeparator = () => {
         return (<ListItemDivider />);
@@ -108,7 +113,9 @@ const SearchScreen:React.FC<Props> = ({ navigation }) => {
             <SearchHeader 
                 title={'Search'}
                 initialQuery={query}
+                initialType={listType}
                 onSearchTextChange={setQuery}
+                onSelectListType={setListType}
                 placeholder={'Search here...'}
                 showLeftActionButton={true}
                 showRightActionButton={true} />
